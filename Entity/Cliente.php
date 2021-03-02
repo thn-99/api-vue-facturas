@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="clientes")
  * @ORM\Entity
  */
-class Cliente
+class Cliente implements JsonSerializable
 {
     /**
      * @var int
@@ -26,7 +26,7 @@ class Cliente
      */
     private $NIF;
 
-    
+
     /**
      * @var string
      *
@@ -80,7 +80,33 @@ class Cliente
      * @ORM\Column(name="telefono", type="integer", length=16, nullable=false)
      */
     private $telefono;
-    
 
+    function __construct($nif, $cp, $razsoc, $dir, $pob, $prov, $correo, $telf)
+    {
+        $this->NIF = $nif;
+        $this->codigoPostal = $cp;
+        $this->razonsocial = $razsoc;
+        $this->direccion = $dir;
+        $this->poblacion = $pob;
+        $this->provincia = $prov;
+        $this->correo = $correo;
+        $this->telefono = $telf;
+    }
 
+    public function updateSelf($nif, $cp, $razsoc, $dir, $pob, $prov, $correo, $telf)
+    {
+        $this->NIF = $nif;
+        $this->codigoPostal = $cp;
+        $this->razonsocial = $razsoc;
+        $this->direccion = $dir;
+        $this->poblacion = $pob;
+        $this->provincia = $prov;
+        $this->correo = $correo;
+        $this->telefono = $telf;
+    }
+
+    public function jsonSerialize()
+    {
+        return ["id" => $this->id, "NIF" => $this->NIF, "codigoPostal" => $this->codigoPostal, "razonsocial" => $this->razonsocial, "direccion" => $this->direccion, "poblacion" => $this->poblacion, "provincia" => $this->provincia, "correo" => $this->correo, "telefono" => $this->telefono];
+    }
 }

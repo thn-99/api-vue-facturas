@@ -1,0 +1,8 @@
+php_value display_errors 1
+php_value display_startup_errors 1
+
+
+RewriteEngine On
+RewriteRule ^cliente/?$ index.php/cliente [L]
+RewriteRule ^clientes$ index.php/clientes [L]
+#RewriteRule ^cambioContrasena$ index.php/cambioContrasena [L]

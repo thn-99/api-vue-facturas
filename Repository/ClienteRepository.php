@@ -1,13 +1,30 @@
 <?php
-require_once __DIR__.'/../Entity/Cliente';
-require_once __DIR__.'/bootstrap.php';
+require_once __DIR__.'/../Entity/Cliente.php';
+require_once __DIR__.'/../bootstrap.php';
 
 class ClienteRepository{
 
     private $entity;
 
-    public function getClientes(){
-        $entity=getEntityManager();
+    function __construct()
+    {
+        $this->entity=getEntityManager();
+    }
+    
+    public function getClienteByNif($nif){
+        $query=$this->entity->createQuery('SELECT u FROM Cliente u WHERE u.NIF=:nif');
+        $query->setParameter(":nif",$nif);
+        return $query->getSingleResult();
+    }
+
+    public function deleteById($id){
+        try{
+            $cliente = $this->entity->find("Cliente",$id);
+            $this->entity->remove($cliente);
+            $this->entity->flush();
+        }catch(Exception $e){
+            echo $e->getMessage();
+        }
         
     }
 
