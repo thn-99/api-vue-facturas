@@ -1,6 +1,8 @@
 <?php
-
+require_once __DIR__.'/Factura.php';
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Cliente
@@ -81,8 +83,16 @@ class Cliente implements JsonSerializable
      */
     private $telefono;
 
+    /**
+     * 
+     * @ORM\OneToMany(targetEntity="Factura", mappedBy="cliente",cascade={"remove"})
+     * 
+     */
+    private $facturas;
+
     function __construct($nif, $cp, $razsoc, $dir, $pob, $prov, $correo, $telf)
     {
+        $this->facturas = new ArrayCollection();
         $this->NIF = $nif;
         $this->codigoPostal = $cp;
         $this->razonsocial = $razsoc;
@@ -107,6 +117,14 @@ class Cliente implements JsonSerializable
 
     public function jsonSerialize()
     {
-        return ["id" => $this->id, "NIF" => $this->NIF, "codigoPostal" => $this->codigoPostal, "razonsocial" => $this->razonsocial, "direccion" => $this->direccion, "poblacion" => $this->poblacion, "provincia" => $this->provincia, "correo" => $this->correo, "telefono" => $this->telefono];
+        return ["id" => $this->id, "NIF" => $this->NIF, "codigoPostal" => $this->codigoPostal, "razonsocial" => $this->razonsocial, "direccion" => $this->direccion, "poblacion" => $this->poblacion, "provincia" => $this->provincia, "correo" => $this->correo, "telefono" => $this->telefono,"facturas"=>$this->facturas];
+    }
+
+    /**
+     * @return Collection|Product[]
+     */
+    public function getFacturas(): Collection
+    {
+        return $this->facturas;
     }
 }

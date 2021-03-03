@@ -22,6 +22,7 @@ class ClienteRepository{
             $cliente = $this->entity->find("Cliente",$id);
             $this->entity->remove($cliente);
             $this->entity->flush();
+            echo true;
         }catch(Exception $e){
             echo $e->getMessage();
         }

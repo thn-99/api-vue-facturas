@@ -3,6 +3,9 @@
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 
 /**
  * Factura
@@ -10,7 +13,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
  * @ORM\Table(name="facturas")
  * @ORM\Entity
  */
-class Fatura
+class Factura implements JsonSerializable
 {
     /**
      * @var int
@@ -21,13 +24,6 @@ class Fatura
      */
     private $id;
 
-    
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numerofactura", type="integer",nullable=false)
-     */
-    private $numeroFactura;
 
     /**
      * @var int
@@ -78,9 +74,27 @@ class Fatura
     
 
     /**
-     * @ManyToOne(targetEntity="Cliente")
+     * @ManyToOne(targetEntity="Cliente", inversedBy="facturas")
      * @JoinColumn(name="id", referencedColumnName="id")
      */
     private $cliente;
+
+
+    public function getCliente(): ?Cliente
+    {
+        return $this->cliente;
+    }
+
+    public function setCliente(?Cliente $cliente): self
+    {
+        $this->cliente = $cliente;
+
+        return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return ["id" => $this->id, "NIF" => $this->NIF, "tipo" => $this->tipo, "fecha" => $this->fecha, "concepto" => $this->concepto, "importe" => $this->importe, "iva" => $this->iva];
+    }
    
 }

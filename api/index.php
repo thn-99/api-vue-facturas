@@ -15,10 +15,10 @@ $uri = basename($_SERVER['REQUEST_URI']);
 $entity = getEntityManager();
 $clienteRepository = new ClienteRepository();
 
-//  echo "method: ".$method;
-//  echo "uri: ".$uri;
-// var_dump($_GET);
-// var_dump($_POST);
+  echo "method: ".$method;
+  echo "uri: ".$uri;
+ var_dump($_GET);
+ var_dump($_POST);
 
 
 if (strpos($uri, "?")) {
@@ -41,24 +41,19 @@ switch ($uri) {
             case 'POST':
                 $objeto = new stdClass();
                 if (checkGetParam("cliente")) {
-                    var_dump($_GET);
-                    $k=preg_replace('/\s+/', '',$_GET["cliente"]);
-                    $jsonData = json_decode($k,true);
+                    $k = preg_replace('/\s+/', '', $_GET["cliente"]);
+                    $jsonData = json_decode($k, true);
                     var_dump($jsonData);
                     if (isset($jsonData["id"])) {
-                        echo "toyaqui";
                         $cliente = $entity->find("Cliente", $jsonData["id"]);
                         $cliente->updateSelf($jsonData["NIF"], $jsonData["codigoPostal"], $jsonData["razonsocial"], $jsonData["direccion"], $jsonData["poblacion"], $jsonData["provincia"], $jsonData["correo"], $jsonData["telefono"]);
-                    }else{
-                        echo "notoy";
-                        $cliente = new Cliente($jsonData["id"],$jsonData["NIF"], $jsonData["codigoPostal"], $jsonData["razonsocial"], $jsonData["direccion"], $jsonData["poblacion"], $jsonData["provincia"], $jsonData["correo"], $jsonData["telefono"]);
+                    } else {
+                        $cliente = new Cliente($jsonData["id"], $jsonData["NIF"], $jsonData["codigoPostal"], $jsonData["razonsocial"], $jsonData["direccion"], $jsonData["poblacion"], $jsonData["provincia"], $jsonData["correo"], $jsonData["telefono"]);
                     }
                     $entity->persist($cliente);
-                    //$idP = $entity->getId();
                     try {
                         $entity->flush();
                         echo true;
-                        //return $idP;
                     } catch (Exception $e) {
                         echo $e->getMessage();
                     }
@@ -68,7 +63,7 @@ switch ($uri) {
                 break;
 
             case 'DELETE':
-                var_dump($_GET);
+                //var_dump($_GET);
                 try {
                     $clienteRepository->deleteById(intval($_GET["id"]));
                 } catch (Exception $e) {
@@ -86,7 +81,22 @@ switch ($uri) {
         break;
     case 'facturas':
         echo json_encode($entity->getRepository("Factura")->findAll());
-    
+        break;
+    case 'factura':
+        switch ($method) {
+            case 'POST':
+                if(checkGetParam("factura") && checkGetParam("idCliente")){
+                    //
+                }
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+    default:
+        //
+    break;
 }
 
 // if($method == "POST"){
